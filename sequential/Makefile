@@ -4,7 +4,7 @@ CFLAGS=-c -Wall
 LDFLAGS=
 SOURCES=driver.cpp seamcarver.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=driver
+EXECUTABLE=driver.out
 
 # targets
 all: $(SOURCES) $(EXECUTABLE)
