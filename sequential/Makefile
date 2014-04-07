@@ -1,8 +1,8 @@
 # macros
 CC=g++
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -g
 LDFLAGS=
-SOURCES=driver.cpp seamcarver.cpp
+SOURCES=driver.cpp seamcarver.cpp image.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=driver.out
 
