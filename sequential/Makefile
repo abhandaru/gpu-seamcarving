@@ -2,7 +2,7 @@
 CC=g++
 CFLAGS=-c -Wall -g
 LDFLAGS=
-SOURCES=driver.cpp seamcarver.cpp image.cpp
+SOURCES=driver.cpp seamcarver.cpp image.cpp energies.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=driver.out
 

@@ -21,7 +21,8 @@ class Image {
   // getters
   size_t width() const;
   size_t height() const;
-  const RGBQuad& get(size_t row, size_t col) const;
+  const RGBQuad& get(int row, int col) const;
+  const RGBQuad* operator [](int i) const; // for convenient access
 
  private:
   void readBitmap(FILE* file);

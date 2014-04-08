@@ -4,13 +4,23 @@
 //
 
 #ifndef __SEAMCARVING_H__
-#define __SEAMCARVING_H__ value
+#define __SEAMCARVING_H__
 
 #include <iostream>
 
+#include "energies.h"
+#include "image.h"
+
+
 class Seamcarver {
  public:
-  Seamcarver();
+  Seamcarver(Image* image);
+  ~Seamcarver();
+  void removeSeam();
+
+ private:
+  // data
+  Image* _image;
 };
 
 #endif

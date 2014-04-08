@@ -41,10 +41,15 @@ size_t Image::height() const {
 }
 
 
-const RGBQuad& Image::get(size_t row, size_t col) const {
+const RGBQuad& Image::get(int row, int col) const {
   size_t index = row * _width + col;
   return _pixels[index];
 }
+
+
+const RGBQuad* Image::operator [](int i) const {
+  return _pixels + (i * _width);
+};
 
 
 //
