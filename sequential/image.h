@@ -19,8 +19,8 @@ class Image {
   void save(const char* path);
 
   // getters
-  size_t width() const;
-  size_t height() const;
+  int width() const;
+  int height() const;
   const RGBQuad& get(int row, int col) const;
   const RGBQuad* operator [](int i) const; // for convenient access
 
@@ -28,8 +28,8 @@ class Image {
   void readBitmap(FILE* file);
 
   // data
-  size_t _width;
-  size_t _height;
+  int _width;
+  int _height;
   RGBQuad* _pixels;
 
   // TODO: Should use some sort of polymorphism here.

@@ -6,10 +6,15 @@
 #ifndef __ENERGIES_H__
 #define __ENERGIES_H__
 
+#include <cfloat>
 #include <cmath>
+#include <iostream>
 
 #include "bitmap.h"
 #include "image.h"
+
+// macros for consistency
+#define MAX_VALUE FLT_MAX
 
 class Energies {
  public:
@@ -17,19 +22,21 @@ class Energies {
   ~Energies();
 
   // filter options
-  void gradient();
+  void compute();
 
   // getters
-  size_t width() const;
-  size_t height() const;
+  int width() const;
+  int height() const;
   float get(int row, int col) const;
+  void set(int row, int col, float value);
+  void print() const;
   const float* operator [](int i) const;
 
  private:
   // data
   Image* _image;
-  size_t _width;
-  size_t _height;
+  int _width;
+  int _height;
   float* _energies;
 };
 

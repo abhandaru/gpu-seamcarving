@@ -31,18 +31,18 @@ Image::~Image() {
 }
 
 
-size_t Image::width() const {
+int Image::width() const {
   return _width;
 }
 
 
-size_t Image::height() const {
+int Image::height() const {
   return _height;
 }
 
 
 const RGBQuad& Image::get(int row, int col) const {
-  size_t index = row * _width + col;
+  int index = row * _width + col;
   return _pixels[index];
 }
 
@@ -63,7 +63,7 @@ void Image::readBitmap(FILE* file) {
   _height = -_infoHeader.biHeight; // Why do we have to negate?
 
   // Read in the pixel data.
-  size_t size = _width * _height;
+  int size = _width * _height;
   _pixels = new RGBQuad[size];
   fread(_pixels, sizeof(RGBQuad), size, file);
 
