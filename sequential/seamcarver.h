@@ -17,6 +17,7 @@ class Seamcarver {
  public:
   Seamcarver(Image* image);
   ~Seamcarver();
+  void removeSeams(int n);
   void removeSeam();
 
  private:

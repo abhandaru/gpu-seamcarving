@@ -21,8 +21,9 @@ int main(int argc, char const *argv[]) {
   cout << "   B: " << (int)p.blue << endl;
 
   Seamcarver seamcarver(&image);
-  seamcarver.removeSeam();
+  seamcarver.removeSeams(10);
 
   // Clean up and return normally.
+  image.save("../outputs/test.bmp");
   return 0;
 }

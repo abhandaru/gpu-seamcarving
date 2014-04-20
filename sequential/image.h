@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <vector>
 
 #include "bitmap.h"
 
@@ -16,7 +17,8 @@ class Image {
  public:
   Image(const char* path);
   ~Image();
-  void save(const char* path);
+  void removeSeam(std::vector<int>& seam);
+  void save(const char* path) const;
 
   // getters
   int width() const;
@@ -33,8 +35,8 @@ class Image {
   RGBQuad* _pixels;
 
   // TODO: Should use some sort of polymorphism here.
-  BitmapFileHeader _fileHeader;
-  BitmapInfoHeader _infoHeader;
+  BitmapFileHeader _file_header;
+  BitmapInfoHeader _info_header;
 };
 
 #endif

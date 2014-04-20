@@ -22,11 +22,19 @@ Seamcarver::~Seamcarver() {
 }
 
 
+// Simply remove n seams.
+void Seamcarver::removeSeams(int n) {
+  cout << "   removing " << n << " seams ..." << endl;
+  for (int i = 0; i < n; i++) {
+    removeSeam();
+  }
+}
+
+
 // Removes 1 seam.
 void Seamcarver::removeSeam() {
   findSeam();
-  cout << "   seam = " << _seam[0] << ", " << _seam[1] << ", ..." << endl;
-
+  _image->removeSeam(_seam);
 }
 
 
