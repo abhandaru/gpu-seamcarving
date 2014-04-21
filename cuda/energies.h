@@ -28,6 +28,7 @@ class Energies {
   int width() const;
   int height() const;
   float get(int row, int col) const;
+  float* getEnergies() const;
   void set(int row, int col, float value);
   void print() const;
   const float* operator [](int i) const;

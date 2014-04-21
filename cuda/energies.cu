@@ -148,8 +148,6 @@ void Energies::compute() {
   cudaMemcpy(_energies, energies_d, energies_size, cudaMemcpyDeviceToHost);
   cudaFree(image_d);
   cudaFree(energies_d);
-
-  print();
 }
 
 
@@ -176,6 +174,11 @@ float Energies::get(int row, int col) const {
   // Common case.
   int index = row * _width + col;
   return _energies[index];
+}
+
+
+float* Energies::getEnergies() const {
+  return _energies;
 }
 
 
