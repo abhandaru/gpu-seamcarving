@@ -8,6 +8,7 @@
 
 #include <cfloat>
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 
 #include "bitmap.h"

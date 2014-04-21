@@ -24,12 +24,13 @@ class Image {
   int width() const;
   int height() const;
   const RGBQuad& get(int row, int col) const;
-  const RGBQuad* operator [](int i) const; // for convenient access
+  const RGBQuad* operator [](int i) const;
 
  private:
   void readBitmap(FILE* file);
 
   // data
+  RGBQuad _zero;
   int _width;
   int _height;
   RGBQuad* _pixels;

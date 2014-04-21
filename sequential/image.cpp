@@ -17,6 +17,12 @@ Image::Image(const char* path) {
   cout << "   file header size: " << sizeof(BitmapFileHeader) << endl;
   cout << "   info header size: " << sizeof(BitmapInfoHeader) << endl;
 
+  // Black pixel.
+  _zero.red = 0;
+  _zero.green = 0;
+  _zero.blue = 0;
+
+  // Try to open and then read in file.
   FILE* file = fopen(path, "rb");
   if (file) {
     readBitmap(file);
@@ -43,11 +49,11 @@ int Image::height() const {
 
 
 const RGBQuad& Image::get(int row, int col) const {
-  int index = row * _width + col;
   if (row < 0 || row > _height ||
       col < 0 || col > _width) {
-    index = 0;
+    return _zero;
   }
+  int index = row * _width + col;
   return _pixels[index];
 }
 

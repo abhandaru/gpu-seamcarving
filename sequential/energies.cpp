@@ -31,51 +31,17 @@ void Energies::compute() {
   for (int row = 0; row < _height; row++) {
     for (int col = 0; col < _width; col++) {
       const RGBQuad& current = _image->get(row, col);
+      const RGBQuad& right = _image->get(row, col + 1);
+      const RGBQuad& down = _image->get(row + 1, col);
 
-      float dx_red;
-      float dx_green;
-      float dx_blue;
-      float dy_red;
-      float dy_green;
-      float dy_blue;
-
-      // Compute squares of differences
-      if (col + 1 < _width && row + 1 < _height) {
-        const RGBQuad& right = _image->get(row, col + 1);
-        const RGBQuad& down = _image->get(row + 1, col);
-        dx_red = (float)right.red - current.red;
-        dx_green = (float)right.green - current.green;
-        dx_blue = (float)right.blue - current.blue;
-        dy_red = (float)down.red - current.red;
-        dy_green = (float)down.green - current.green;
-        dy_blue = (float)down.blue - current.blue;
-      }
-      else if (col + 1 == _width && row + 1 < _height) {
-        const RGBQuad& down = _image->get(row + 1, col);
-        dx_red = (float)current.red;
-        dx_green = (float)current.green;
-        dx_blue = (float)current.blue;
-        dy_red = (float)down.red - current.red;
-        dy_green = (float)down.green - current.green;
-        dy_blue = (float)down.blue - current.blue;
-      }
-      else if (col + 1 < _width && row + 1 == _height) {
-        const RGBQuad& right = _image->get(row, col + 1);
-        dx_red = (float)right.red - current.red;
-        dx_green = (float)right.green - current.green;
-        dx_blue = (float)right.blue - current.blue;
-        dy_red = (float)current.red;
-        dy_green = (float)current.green;
-        dy_blue = (float)current.blue;
-      }
-      else {
-        dx_red = (float)current.red;
-        dx_green = (float)current.green;
-        dx_blue = (float)current.blue;
-        dy_red = (float)current.red;
-        dy_green = (float)current.green;
-        dy_blue = (float)current.blue;
-      }
+      // Compute gradient.
+      // This is a vector operation, so there is room for improvement.
+      float dx_red = (float)right.red - current.red;
+      float dx_green = (float)right.green - current.green;
+      float dx_blue = (float)right.blue - current.blue;
+      float dy_red = (float)down.red - current.red;
+      float dy_green = (float)down.green - current.green;
+      float dy_blue = (float)down.blue - current.blue;
 
       // Sum the squares of differences.
       float dx2 = dx_red*dx_red + dx_green*dx_green + dx_blue*dx_blue;
@@ -87,7 +53,6 @@ void Energies::compute() {
       _energies[index] = grad;
     }
   }
-  print();
 }
 
 
@@ -127,7 +92,7 @@ void Energies::print() const {
   cout << "Energies: " << endl;
   for (int i = 0; i < _height; i++) {
     for (int j = 0; j < _width; j++) {
-      cout << get(i, j) << "\t";
+      cout << std::fixed << std::setprecision(3) << get(i, j) << "\t";
     }
     cout << endl;
   }
