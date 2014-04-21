@@ -10,8 +10,14 @@ using std::endl;
 
 
 int main(int argc, char const *argv[]) {
+  // Parse args
+  if (argc < 3) {
+    cout << "Usage: driver.out -n $num_seams" << endl;
+    exit(1);
+  }
 
-  Image image("../images/boat-16.bmp");
+  // Load a bitmap image.
+  Image image("../images/boat-512.bmp");
 
   // Simple test to see if the image was loaded correctly.
   cout << ">> pixel (0, 1): " << endl;
@@ -20,8 +26,10 @@ int main(int argc, char const *argv[]) {
   cout << "   G: " << (int)p.green << endl;
   cout << "   B: " << (int)p.blue << endl;
 
+  // Remove seams.
+  int num_seams = atoi(argv[2]);
   Seamcarver seamcarver(&image);
-  seamcarver.removeSeams(1);
+  seamcarver.removeSeams(num_seams);
 
   // Clean up and return normally.
   image.save("../outputs/test.bmp");

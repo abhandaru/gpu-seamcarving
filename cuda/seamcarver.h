@@ -23,6 +23,7 @@ class Seamcarver {
  private:
   void findSeam();
   float minCost(Energies& energies, int i, int j);
+  int nextPower2(int n);
 
   // data
   Image* _image;
