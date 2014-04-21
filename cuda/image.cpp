@@ -47,6 +47,9 @@ const RGBQuad& Image::get(int row, int col) const {
   return _pixels[index];
 }
 
+const RGBQuad* Image::getPixels() const {
+  return _pixels;
+}
 
 const RGBQuad* Image::operator [](int i) const {
   return _pixels + (i * _width);

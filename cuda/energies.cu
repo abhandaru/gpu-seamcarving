@@ -44,21 +44,21 @@ __global__ void compute_energies_kernel(RGBQuad* image, float* energies,
 
   // Populate shared memory with image pixels
   if (row < height && col < width) {
-    shared_image[tx * BLOCK_WIDTH + ty] = image[row * width + col];
+    shared_image[ty * (BLOCK_WIDTH + 1) + tx] = image[row * width + col];
   }
   else {
-    RGBQuad pixel = shared_image[tx * BLOCK_WIDTH + ty];
+    RGBQuad& pixel = shared_image[ty * (BLOCK_WIDTH + 1) + tx];
     pixel.red = 0;
     pixel.green = 0;
     pixel.blue = 0;
-    return;
+    //return;
   }
 
   // Wait for all threads to finish loading shared memory
   __syncthreads();
 
   // Get current pixel
-  RGBQuad& current = shared_image[ty * BLOCK_WIDTH + tx];
+  RGBQuad& current = shared_image[ty * (BLOCK_WIDTH + 1) + tx];
 
   // Declare difference
   float dx2;
@@ -79,7 +79,7 @@ __global__ void compute_energies_kernel(RGBQuad* image, float* energies,
     dx2 = dx_red * dx_red + dx_green * dx_green + dx_blue * dx_blue;
   }
   else {
-    RGBQuad& right = shared_image[ty * BLOCK_WIDTH + tx + 1];
+    RGBQuad& right = shared_image[ty * (BLOCK_WIDTH + 1) + tx + 1];
     float dx_red = (float)right.red - current.red;
     float dx_green = (float)right.green - current.green;
     float dx_blue = (float)right.blue - current.blue;
@@ -100,7 +100,7 @@ __global__ void compute_energies_kernel(RGBQuad* image, float* energies,
     dy2 = dy_red * dy_red + dy_green * dy_green + dy_blue * dy_blue;
   }
   else {
-    RGBQuad& down = shared_image[(ty + 1) * BLOCK_WIDTH + tx];
+    RGBQuad& down = shared_image[(ty + 1) * (BLOCK_WIDTH + 1) + tx];
     float dy_red = (float)down.red - current.red;
     float dy_green = (float)down.green - current.green;
     float dy_blue = (float)down.blue - current.blue;
@@ -131,7 +131,7 @@ void Energies::compute() {
 
   // Allocate device memory and for inputs and outputs
   cudaMalloc((void**) &image_d, image_size);
-  cudaMemcpy(image_d, _image, image_size, cudaMemcpyHostToDevice);
+  cudaMemcpy(image_d, _image->getPixels(), image_size, cudaMemcpyHostToDevice);
   cudaMalloc((void**) &energies_d, energies_size);
 
   // Invoke the kernel to compute the energies

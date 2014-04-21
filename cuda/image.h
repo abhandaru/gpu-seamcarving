@@ -24,6 +24,7 @@ class Image {
   int width() const;
   int height() const;
   const RGBQuad& get(int row, int col) const;
+  const RGBQuad* getPixels() const;
   const RGBQuad* operator [](int i) const; // for convenient access
 
  private:
