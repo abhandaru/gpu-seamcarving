@@ -44,6 +44,10 @@ int Image::height() const {
 
 const RGBQuad& Image::get(int row, int col) const {
   int index = row * _width + col;
+  if (row < 0 || row > _height ||
+      col < 0 || col > _width) {
+    index = 0;
+  }
   return _pixels[index];
 }
 
@@ -54,21 +58,22 @@ const RGBQuad* Image::operator [](int i) const {
 
 
 void Image::removeSeam(vector<int>& seam) {
-  int length = _width * _height;
+  int length = (_width - 1) * _height;
   int num_removed = 0;
   for (int i = 0; i < length; i++) {
-    int row = num_removed;
-    int col = seam[row];
-
-    int index = row * _width + col;
-    if (i == index) {
-      num_removed++;
+    if (num_removed < seam.size()) {
+      int row = num_removed;
+      int col = seam[row];
+      int index = (row * _width + col) - num_removed;
+      if (i == index) {
+        num_removed++;
+      }
     }
-
+    // Shift everything backwards.
     _pixels[i] = _pixels[i + num_removed];
   }
 
-  // Update width.
+  // Update the dimensions.
   _width--;
   _info_header.biWidth = _width;
 }
