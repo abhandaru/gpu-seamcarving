@@ -47,9 +47,13 @@ const RGBQuad& Image::get(int row, int col) const {
   return _pixels[index];
 }
 
+
+// Return an immutable array of RGBQuads.
+// Needed for efficient memcpy over to device memory.
 const RGBQuad* Image::getPixels() const {
   return _pixels;
 }
+
 
 const RGBQuad* Image::operator [](int i) const {
   return _pixels + (i * _width);
@@ -57,21 +61,22 @@ const RGBQuad* Image::operator [](int i) const {
 
 
 void Image::removeSeam(vector<int>& seam) {
-  int length = _width * _height;
+  int length = (_width - 1) * _height;
   int num_removed = 0;
   for (int i = 0; i < length; i++) {
-    int row = num_removed;
-    int col = seam[row];
-
-    int index = row * _width + col;
-    if (i == index) {
-      num_removed++;
+    if (num_removed < seam.size()) {
+      int row = num_removed;
+      int col = seam[row];
+      int index = (row * _width + col) - num_removed;
+      if (i == index) {
+        num_removed++;
+      }
     }
-
+    // Shift everything backwards.
     _pixels[i] = _pixels[i + num_removed];
   }
 
-  // Update width.
+  // Update the dimensions.
   _width--;
   _info_header.biWidth = _width;
 }
