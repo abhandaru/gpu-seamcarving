@@ -15,22 +15,13 @@ using std::endl;
 using std::min;
 
 
-Energies::Energies(Image* image) {
-  _width = image->width();
-  _height = image->height();
-  _image = image;
-  _energies = new float[_width * _height];
-}
+//
+// Kernel functions.
+//
 
-
-Energies::~Energies() {
-  delete _energies;
-}
-
-
-__global__ void compute_energies_kernel(RGBQuad* image, float* energies,
+__global__
+void compute_energies_kernel(RGBQuad* image, float* energies,
     int width, int height) {
-
   // Extract thread and block index information
   int ty = threadIdx.y;
   int tx = threadIdx.x;
@@ -113,6 +104,23 @@ __global__ void compute_energies_kernel(RGBQuad* image, float* energies,
   // Store results
   int index = row * width + col;
   energies[index] = grad;
+}
+
+
+//
+// Class methods.
+//
+
+Energies::Energies(Image* image) {
+  _width = image->width();
+  _height = image->height();
+  _image = image;
+  _energies = new float[_width * _height];
+}
+
+
+Energies::~Energies() {
+  delete _energies;
 }
 
 

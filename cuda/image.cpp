@@ -64,7 +64,7 @@ void Image::removeSeam(vector<int>& seam) {
   int length = (_width - 1) * _height;
   int num_removed = 0;
   for (int i = 0; i < length; i++) {
-    if (num_removed < seam.size()) {
+    if (num_removed < _height) {
       int row = num_removed;
       int col = seam[row];
       int index = (row * _width + col) - num_removed;

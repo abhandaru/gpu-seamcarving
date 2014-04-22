@@ -49,8 +49,8 @@ int Image::height() const {
 
 
 const RGBQuad& Image::get(int row, int col) const {
-  if (row < 0 || row > _height ||
-      col < 0 || col > _width) {
+  if (row < 0 || row >= _height ||
+      col < 0 || col >= _width) {
     return _zero;
   }
   int index = row * _width + col;
@@ -67,7 +67,7 @@ void Image::removeSeam(vector<int>& seam) {
   int length = (_width - 1) * _height;
   int num_removed = 0;
   for (int i = 0; i < length; i++) {
-    if (num_removed < seam.size()) {
+    if (num_removed < _height) {
       int row = num_removed;
       int col = seam[row];
       int index = (row * _width + col) - num_removed;
