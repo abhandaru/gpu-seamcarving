@@ -69,8 +69,9 @@ void compute_min_cost_kernel(float* energies, float* min_costs,
 
   // Load the first row of shared memory with energies and min costs
   if (col < width) {
-    shared_costs[tx] = energies[col];
-    min_costs[col] = energies[col];
+    float energy = energies[col];
+    shared_costs[tx] = energy;
+    min_costs[col] = energy;
   } else {
     return;
   }
