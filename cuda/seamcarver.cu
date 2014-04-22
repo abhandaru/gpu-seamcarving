@@ -34,7 +34,7 @@ static void find_min_kernel(float* row, float* mins, int* min_indices,
 
   // Copy global intermediate values into shared memory.
   shared_mins[tx] = (index < width) ? row[index] : MAX_VALUE;
-  shared_min_indices[tx] = (index < width) ? index : 22;
+  shared_min_indices[tx] = (index < width) ? index : -1;
 
   __syncthreads();
 

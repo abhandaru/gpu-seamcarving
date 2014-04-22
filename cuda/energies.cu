@@ -42,7 +42,7 @@ void compute_energies_kernel(RGBQuad* image, float* energies,
     pixel.red = 0;
     pixel.green = 0;
     pixel.blue = 0;
-    //return;
+    return;
   }
 
   // Wait for all threads to finish loading shared memory
@@ -51,11 +51,9 @@ void compute_energies_kernel(RGBQuad* image, float* energies,
   // Get current pixel
   RGBQuad& current = shared_image[ty * (BLOCK_WIDTH + 1) + tx];
 
-  // Declare difference
+  // Compute differences with boundary checks
   float dx2;
   float dy2;
-
-  // Compute differences with boundary checks
   if (col == width - 1) {
     float dx_red = (float)current.red;
     float dx_green = (float)current.green;
