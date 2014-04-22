@@ -12,7 +12,6 @@ using std::vector;
 
 
 Seamcarver::Seamcarver(Image* image) {
-  cout << ">> init seamcarver" << endl;
   _image = image;
 }
 
@@ -24,7 +23,6 @@ Seamcarver::~Seamcarver() {
 
 // Simply remove n seams.
 void Seamcarver::removeSeams(int n) {
-  cout << "   removing " << n << " seams ..." << endl;
   for (int i = 0; i < n; i++) {
     removeSeam();
   }

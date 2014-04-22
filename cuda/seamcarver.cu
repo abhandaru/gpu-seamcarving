@@ -27,30 +27,31 @@ static void find_min_kernel(float* row, float* mins, int* min_indices,
   int bx = blockIdx.x;
   int index = tx + bx * MAX_THREADS;
 
+  // Set up shared memory for tracking mins.
   extern __shared__ float shared_memory[];
-
   float* shared_mins = (float*) shared_memory;
   int* shared_min_indices = (int*) (&(shared_memory[power]));
 
   // Copy global intermediate values into shared memory.
   shared_mins[tx] = (index < width) ? row[index] : MAX_VALUE;
   shared_min_indices[tx] = (index < width) ? index : -1;
-
   __syncthreads();
 
+  // Do the reduction for value pairs.
   for (int i = power / 2; i > 0; i >>= 1) {
-      if (tx < i) {
-          if (shared_mins[tx] > shared_mins[tx + i]) {
-            shared_mins[tx] = shared_mins[tx + i];
-            shared_min_indices[tx] = shared_min_indices[tx + i];
-          }
+    if (tx < i) {
+      if (shared_mins[tx] > shared_mins[tx + i]) {
+        shared_mins[tx] = shared_mins[tx + i];
+        shared_min_indices[tx] = shared_min_indices[tx + i];
       }
-      __syncthreads();
+    }
+    __syncthreads();
   }
 
+  // Thread 0 has the solution.
   if (tx == 0) {
-      mins[bx] = shared_mins[0];
-      min_indices[bx] = shared_min_indices[0];
+    mins[bx] = shared_mins[0];
+    min_indices[bx] = shared_min_indices[0];
   }
 }
 
@@ -70,14 +71,14 @@ void compute_min_cost_kernel(float* energies, float* min_costs,
   if (col < width) {
     shared_costs[tx] = energies[col];
     min_costs[col] = energies[col];
-  }
-  else {
+  } else {
     return;
   }
 
-  // Wait for all threads to finish loading the first row of shared memory
+  // Wait for all threads to finish loading the first row of shared memory.
   __syncthreads();
 
+  // Compute minimum costs row by row w/ by double buffering.
   for (int row = 1; row < height; row++) {
     float left = (tx > 0) ? shared_costs[tx - 1] : MAX_VALUE;
     float middle = shared_costs[tx];
@@ -99,7 +100,6 @@ void compute_min_cost_kernel(float* energies, float* min_costs,
 //
 
 Seamcarver::Seamcarver(Image* image) {
-  cout << ">> init seamcarver" << endl;
   _image = image;
 }
 
@@ -111,7 +111,6 @@ Seamcarver::~Seamcarver() {
 
 // Simply remove n seams.
 void Seamcarver::removeSeams(int n) {
-  cout << "   removing " << n << " seams ..." << endl;
   for (int i = 0; i < n; i++) {
     removeSeam();
   }
@@ -187,10 +186,10 @@ void Seamcarver::findSeam() {
   float minimum = mins[0];
   int min_index = min_indices[0];
   for (int i = 1; i < num_blocks; i++) {
-      if (mins[i] < minimum) {
-        minimum = mins[i];
-        min_index = min_indices[i];
-      }
+    if (mins[i] < minimum) {
+      minimum = mins[i];
+      min_index = min_indices[i];
+    }
   }
 
   // Create the seam in reverse order.

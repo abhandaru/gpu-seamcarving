@@ -36,8 +36,7 @@ void compute_energies_kernel(RGBQuad* image, float* energies,
   // Populate shared memory with image pixels
   if (row < height && col < width) {
     shared_image[ty * (BLOCK_WIDTH + 1) + tx] = image[row * width + col];
-  }
-  else {
+  } else {
     RGBQuad& pixel = shared_image[ty * (BLOCK_WIDTH + 1) + tx];
     pixel.red = 0;
     pixel.green = 0;
@@ -48,12 +47,12 @@ void compute_energies_kernel(RGBQuad* image, float* energies,
   // Wait for all threads to finish loading shared memory
   __syncthreads();
 
-  // Get current pixel
-  RGBQuad& current = shared_image[ty * (BLOCK_WIDTH + 1) + tx];
-
   // Compute differences with boundary checks
+  RGBQuad& current = shared_image[ty * (BLOCK_WIDTH + 1) + tx];
   float dx2;
   float dy2;
+
+  // Edges of blocks and image are special cases.
   if (col == width - 1) {
     float dx_red = (float)current.red;
     float dx_green = (float)current.green;
@@ -128,7 +127,6 @@ Energies::~Energies() {
 // See this article: http://stackoverflow.com/a/15686412/408940
 //
 void Energies::compute() {
-
   // Declare pointers for device memory
   RGBQuad* image_d;
   float* energies_d;
