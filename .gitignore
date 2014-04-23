@@ -22,3 +22,6 @@
 
 # Output files
 outputs/test.bmp
+outputs/sequential.bmp
+outputs/cuda.bmp
+
